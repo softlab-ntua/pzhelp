@@ -1,0 +1,15 @@
+# Backup files etc.
+
+*~
+\#*\#
+*.bak
+*.backup
+.*.sw[a-z]
+
+# C/C++ specific
+
+*.o
+
+# Mac OS specific
+
+.DS_Store

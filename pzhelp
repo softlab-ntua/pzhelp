@@ -1,0 +1,306 @@
+// PZhelp: An educational helper include file for -*- C++ -*-
+// URL: https://github.com/softlab-ntua/pzhelp
+
+#ifndef __PZHELP__
+#define __PZHELP__
+
+
+// Standard header files
+
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cfloat>
+#include <climits>
+#include <cmath>
+
+
+// Expose the standard namespace
+
+using namespace std;
+
+
+// Type for REAL numbers
+
+typedef double REAL;
+
+#define REAL_MANT_DIG   DBL_MANT_DIG
+#define REAL_DIG        DBL_DIG
+#define REAL_MIN_EXP    DBL_MIN_EXP
+#define REAL_MIN_10_EXP DBL_MIN_10_EXP
+#define REAL_MAX_EXP    DBL_MAX_EXP
+#define REAL_MAX_10_EXP DBL_MAX_10_EXP
+#define REAL_MIN        DBL_MIN
+#define REAL_MAX        DBL_MAX
+#define REAL_EPSILON    DBL_EPSILON
+
+
+// Runtime errors and messages
+
+#define __pazcal_ERROR(...)                             \
+  __pazcal_runtime(__pazcal_error_normal, __VA_ARGS__)
+#define __pazcal_FATAL(...)                             \
+  __pazcal_runtime(__pazcal_error_fatal, __VA_ARGS__)
+#define __pazcal_SYSTEM(...)                            \
+  __pazcal_runtime(__pazcal_error_system, __VA_ARGS__)
+
+enum __pazcal_error_type {
+  __pazcal_error_normal,
+  __pazcal_error_fatal,
+  __pazcal_error_system
+};
+
+inline void __pazcal_runtime (__pazcal_error_type t, const char * fmt, ...) {
+  va_list arg;
+  va_start(arg, fmt);
+  if (t == __pazcal_error_system) perror(NULL);
+  fprintf(stderr, "Pazcal runtime error: ");
+  vfprintf(stderr, fmt, arg);
+  fprintf(stderr, "\n");
+  if (t == __pazcal_error_fatal) exit(1);
+}
+
+
+// Generic argument counting machinery
+
+#define __pazcal_CAT(A, B) __pazcal_CAT2(A, B)
+#define __pazcal_CAT2(A, B) A ## B
+
+#define __pazcal_COUNT_ARG(...) \
+  __pazcal_COUNT_AUX(42, ## __VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#define __pazcal_COUNT_AUX(_, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, n, ...) n
+
+
+// WRITE set of macros
+
+#define WRITE __pazcal_write
+#define WRITELN __pazcal_write_ln
+
+inline void __pazcal_write_fmt (const char * a, int w, int) {
+  printf("%*s", w, a);
+}
+
+inline void __pazcal_write_fmt (bool a, int w, int) {
+  printf("%*s", w, a ? "true" : "false");
+}
+
+inline void __pazcal_write_fmt (char a, int w, int) {
+  printf("%*c", w, a);
+}
+
+inline void __pazcal_write_fmt (int a, int w, int) {
+  printf("%*d", w, a);
+}
+
+inline void __pazcal_write_fmt (unsigned int a, int w, int) {
+  printf("%*u", w, a);
+}
+
+inline void __pazcal_write_fmt (long int a, int w, int) {
+  printf("%*ld", w, a);
+}
+
+inline void __pazcal_write_fmt (unsigned long a, int w, int) {
+  printf("%*lu", w, a);
+}
+
+inline void __pazcal_write_fmt (long long int a, int w, int) {
+  printf("%*lld", w, a);
+}
+
+inline void __pazcal_write_fmt (unsigned long long a, int w, int) {
+  printf("%*llu", w, a);
+}
+
+inline void __pazcal_write_fmt (float a, int w, int p) {
+  printf("%*.*f", w, p, a);
+}
+
+inline void __pazcal_write_fmt (double a, int w, int p) {
+  printf("%*.*lf", w, p, a);
+}
+
+inline void __pazcal_write_fmt (long double a, int w, int p) {
+  printf("%*.*Lf", w, p, a);
+}
+
+template<typename T>
+inline void __pazcal_write_sep (T const& a) {
+  putchar(' ');
+  __pazcal_write_fmt(a, 0, 6);
+}
+
+template<typename TF, typename ... TR>
+inline void __pazcal_write_sep (TF const& first, TR const& ... rest) {
+  __pazcal_write_sep(first);
+  __pazcal_write_sep(rest...);
+}
+
+inline void __pazcal_write () {}
+
+template<typename T>
+inline void __pazcal_write (T const& a) {
+  __pazcal_write_fmt(a, 0, 6);
+}
+
+template<typename TF, typename ... TR>
+inline void __pazcal_write (TF const& first, TR const& ... rest) {
+  __pazcal_write_fmt(first, 0, 6);
+  __pazcal_write_sep(rest...);
+}
+
+template<typename ... TR>
+inline void __pazcal_write_ln (TR const& ... args) {
+  __pazcal_write(args...);
+  putchar('\n');
+}
+
+template<typename T>
+class __pazcal_format {
+ protected:
+  T const& value;
+  int width, precision;
+
+ public:
+  explicit __pazcal_format (T const& a, int w, int p) :
+    value(a), width(w), precision(p) {}
+
+  template<typename TX>
+  friend inline void __pazcal_write_fmt (__pazcal_format<TX> const& a,
+                                         int w, int p);
+};
+
+template<typename T>
+inline __pazcal_format<T> FORM (T const& a, int w) {
+  return __pazcal_format<T>(a, w, 0);
+}
+
+template<typename T>
+inline __pazcal_format<T> FORM (T const& a, int w, int p) {
+  return __pazcal_format<T>(a, w, p);
+}
+
+template<typename T>
+inline void __pazcal_write_fmt (__pazcal_format<T> const& a, int, int) {
+  __pazcal_write_fmt(a.value, a.width, a.precision);
+}
+
+
+// READ set of functions
+
+inline int READ_INT () {
+  int result;
+  scanf("%d", &result);
+  return result;
+}
+
+inline REAL READ_REAL () {
+  REAL result;
+  scanf("%lf", &result);
+  return result;
+}
+
+inline char* READ_STRING (size_t n, char *s) {
+  char * result = s;
+  for (int i=0; i<n; i++) {
+    int c = (i+1 < n) ? getchar() : '\0';
+    if (c == '\n' || c == EOF) { *s++ = '\0'; break; }
+    *s++ = c;
+  }
+  return result;
+}
+
+inline void SKIP_LINE () {
+  for (;;) {
+    int c = getchar();
+    if (c == '\n' || c == EOF) break;
+  }
+}
+
+
+// Program and procedures
+
+#define PROGRAM int main ()
+#define PROC void
+#define FUNC
+
+
+// FOR loops
+
+#define __pazcal_FOR_4(var, start, sign, stop)  \
+  __pazcal_FOR_5(var, start, sign, stop, 1)
+#define __pazcal_FOR_5(var, start, sign, stop, step)                    \
+  for (__typeof__(((stop) - (start)) / (step))                          \
+         __the_var  = (start),                                          \
+         __the_stop = (stop),                                           \
+         __the_step = (sign) * ((step) ? :                              \
+           (__pazcal_FATAL("zero step in FOR loop"), 1));               \
+       ((var) = __the_var,                                              \
+        (var) = (var),                                                  \
+        (__the_step >= 0 ? __the_var <= __the_stop                      \
+                         : __the_var >= __the_stop));                   \
+       __the_var += __the_step)
+
+#define FOR(...) \
+  __pazcal_CAT(__pazcal_FOR_, __pazcal_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
+
+#define TO     , +1 ,
+#define DOWNTO , -1 ,
+#define STEP   ,
+
+
+// Switch
+
+#define NEXT do {} while(0)
+
+
+// Aliases for operators
+
+#define MOD %
+#define AND &&
+#define OR  ||
+#define NOT !
+
+
+// MIN and MAX
+
+template<typename T>
+const T& min (const T& a, const T& b) {
+  return (b < a) ? b : a;
+}
+
+template<typename T>
+const T& max (const T& a, const T& b) {
+  return (a < b) ? b : a;
+}
+
+
+// I/O redirection
+
+inline void INPUT (const char *filename) {
+  if (freopen(filename, "rt", stdin) == NULL) {
+    __pazcal_SYSTEM("Cannot redirect stdin to %s", filename);
+    perror(NULL);
+  }
+}
+
+inline void OUTPUT (const char *filename) {
+  if (freopen(filename, "wt", stdout) == NULL)
+    __pazcal_SYSTEM("Cannot redirect stdout to %s", filename);
+}
+
+
+// Dynamic memory management
+
+#define __pazcal_NEW_1(type)    __pazcal_NEW_2(type, 1)
+#define __pazcal_NEW_2(type, n) (new type [n])
+
+#define NEW(...) \
+  __pazcal_CAT(__pazcal_NEW_, __pazcal_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
+
+#define DELETE(p) do { delete [] (p); } while(0)
+
+
+#endif  // __PZHELP__
