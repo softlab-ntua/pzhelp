@@ -204,7 +204,7 @@ inline REAL READ_REAL () {
 
 inline char* READ_STRING (size_t n, char *s) {
   char * result = s;
-  for (int i=0; i<n; i++) {
+  for (size_t i=0; i<n; i++) {
     int c = (i+1 < n) ? getchar() : '\0';
     if (c == '\n' || c == EOF) { *s++ = '\0'; break; }
     *s++ = c;
@@ -238,10 +238,13 @@ inline void SKIP_LINE () {
          __the_step = (sign) * ((step) ? :                              \
            (__pazcal_FATAL("zero step in FOR loop"), 1));               \
        ((var) = __the_var,                                              \
-        (var) = (var),                                                  \
         (__the_step >= 0 ? __the_var <= __the_stop                      \
-                         : __the_var >= __the_stop));                   \
-       __the_var += __the_step)
+         : __the_var >= __the_stop));                                   \
+       ((var) != __the_var ?                                            \
+          __pazcal_FATAL("control variable changed in FOR loop") :      \
+        (stop) != __the_stop ?                                          \
+          __pazcal_FATAL("loop limit changed in FOR loop") :            \
+        (__the_var += __the_step, (void) 0)))
 
 #define FOR(...) \
   __pazcal_CAT(__pazcal_FOR_, __pazcal_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
@@ -249,11 +252,6 @@ inline void SKIP_LINE () {
 #define TO     , +1 ,
 #define DOWNTO , -1 ,
 #define STEP   ,
-
-
-// Switch
-
-#define NEXT do {} while(0)
 
 
 // Aliases for operators
