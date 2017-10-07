@@ -39,152 +39,152 @@ typedef double REAL;
 
 // Runtime errors and messages
 
-#define __pazcal_ERROR(...)                             \
-  __pazcal_runtime(__pazcal_error_normal, __VA_ARGS__)
-#define __pazcal_FATAL(...)                             \
-  __pazcal_runtime(__pazcal_error_fatal, __VA_ARGS__)
-#define __pazcal_SYSTEM(...)                            \
-  __pazcal_runtime(__pazcal_error_system, __VA_ARGS__)
+#define __pzhelp_ERROR(...)                             \
+  __pzhelp_runtime(__pzhelp_error_normal, __VA_ARGS__)
+#define __pzhelp_FATAL(...)                             \
+  __pzhelp_runtime(__pzhelp_error_fatal, __VA_ARGS__)
+#define __pzhelp_SYSTEM(...)                            \
+  __pzhelp_runtime(__pzhelp_error_system, __VA_ARGS__)
 
-enum __pazcal_error_type {
-  __pazcal_error_normal,
-  __pazcal_error_fatal,
-  __pazcal_error_system
+enum __pzhelp_error_type {
+  __pzhelp_error_normal,
+  __pzhelp_error_fatal,
+  __pzhelp_error_system
 };
 
-inline void __pazcal_runtime (__pazcal_error_type t, const char * fmt, ...) {
+inline void __pzhelp_runtime (__pzhelp_error_type t, const char * fmt, ...) {
   va_list arg;
   va_start(arg, fmt);
-  if (t == __pazcal_error_system) perror(NULL);
-  fprintf(stderr, "Pazcal runtime error: ");
+  if (t == __pzhelp_error_system) perror(NULL);
+  fprintf(stderr, "PZhelp runtime error: ");
   vfprintf(stderr, fmt, arg);
   fprintf(stderr, "\n");
-  if (t == __pazcal_error_fatal) exit(1);
+  if (t == __pzhelp_error_fatal) exit(1);
 }
 
 
 // Generic argument counting machinery
 
-#define __pazcal_CAT(A, B) __pazcal_CAT2(A, B)
-#define __pazcal_CAT2(A, B) A ## B
+#define __pzhelp_CAT(A, B) __pzhelp_CAT2(A, B)
+#define __pzhelp_CAT2(A, B) A ## B
 
-#define __pazcal_COUNT_ARG(...) \
-  __pazcal_COUNT_AUX(42, ## __VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-#define __pazcal_COUNT_AUX(_, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, n, ...) n
+#define __pzhelp_COUNT_ARG(...) \
+  __pzhelp_COUNT_AUX(42, ## __VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#define __pzhelp_COUNT_AUX(_, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, n, ...) n
 
 
 // WRITE set of macros
 
-#define WRITE __pazcal_write
-#define WRITELN __pazcal_write_ln
+#define WRITE __pzhelp_write
+#define WRITELN __pzhelp_write_ln
 
-inline void __pazcal_write_fmt (const char * a, int w, int) {
+inline void __pzhelp_write_fmt (const char * a, int w, int) {
   printf("%*s", w, a);
 }
 
-inline void __pazcal_write_fmt (bool a, int w, int) {
+inline void __pzhelp_write_fmt (bool a, int w, int) {
   printf("%*s", w, a ? "true" : "false");
 }
 
-inline void __pazcal_write_fmt (char a, int w, int) {
+inline void __pzhelp_write_fmt (char a, int w, int) {
   printf("%*c", w, a);
 }
 
-inline void __pazcal_write_fmt (int a, int w, int) {
+inline void __pzhelp_write_fmt (int a, int w, int) {
   printf("%*d", w, a);
 }
 
-inline void __pazcal_write_fmt (unsigned int a, int w, int) {
+inline void __pzhelp_write_fmt (unsigned int a, int w, int) {
   printf("%*u", w, a);
 }
 
-inline void __pazcal_write_fmt (long int a, int w, int) {
+inline void __pzhelp_write_fmt (long int a, int w, int) {
   printf("%*ld", w, a);
 }
 
-inline void __pazcal_write_fmt (unsigned long a, int w, int) {
+inline void __pzhelp_write_fmt (unsigned long a, int w, int) {
   printf("%*lu", w, a);
 }
 
-inline void __pazcal_write_fmt (long long int a, int w, int) {
+inline void __pzhelp_write_fmt (long long int a, int w, int) {
   printf("%*lld", w, a);
 }
 
-inline void __pazcal_write_fmt (unsigned long long a, int w, int) {
+inline void __pzhelp_write_fmt (unsigned long long a, int w, int) {
   printf("%*llu", w, a);
 }
 
-inline void __pazcal_write_fmt (float a, int w, int p) {
+inline void __pzhelp_write_fmt (float a, int w, int p) {
   printf("%*.*f", w, p, a);
 }
 
-inline void __pazcal_write_fmt (double a, int w, int p) {
+inline void __pzhelp_write_fmt (double a, int w, int p) {
   printf("%*.*lf", w, p, a);
 }
 
-inline void __pazcal_write_fmt (long double a, int w, int p) {
+inline void __pzhelp_write_fmt (long double a, int w, int p) {
   printf("%*.*Lf", w, p, a);
 }
 
 template<typename T>
-inline void __pazcal_write_sep (T const& a) {
+inline void __pzhelp_write_sep (T const& a) {
   putchar(' ');
-  __pazcal_write_fmt(a, 0, 6);
+  __pzhelp_write_fmt(a, 0, 6);
 }
 
 template<typename TF, typename ... TR>
-inline void __pazcal_write_sep (TF const& first, TR const& ... rest) {
-  __pazcal_write_sep(first);
-  __pazcal_write_sep(rest...);
+inline void __pzhelp_write_sep (TF const& first, TR const& ... rest) {
+  __pzhelp_write_sep(first);
+  __pzhelp_write_sep(rest...);
 }
 
-inline void __pazcal_write () {}
+inline void __pzhelp_write () {}
 
 template<typename T>
-inline void __pazcal_write (T const& a) {
-  __pazcal_write_fmt(a, 0, 6);
+inline void __pzhelp_write (T const& a) {
+  __pzhelp_write_fmt(a, 0, 6);
 }
 
 template<typename TF, typename ... TR>
-inline void __pazcal_write (TF const& first, TR const& ... rest) {
-  __pazcal_write_fmt(first, 0, 6);
-  __pazcal_write_sep(rest...);
+inline void __pzhelp_write (TF const& first, TR const& ... rest) {
+  __pzhelp_write_fmt(first, 0, 6);
+  __pzhelp_write_sep(rest...);
 }
 
 template<typename ... TR>
-inline void __pazcal_write_ln (TR const& ... args) {
-  __pazcal_write(args...);
+inline void __pzhelp_write_ln (TR const& ... args) {
+  __pzhelp_write(args...);
   putchar('\n');
 }
 
 template<typename T>
-class __pazcal_format {
+class __pzhelp_format {
  protected:
   T const& value;
   int width, precision;
 
  public:
-  explicit __pazcal_format (T const& a, int w, int p) :
+  explicit __pzhelp_format (T const& a, int w, int p) :
     value(a), width(w), precision(p) {}
 
   template<typename TX>
-  friend inline void __pazcal_write_fmt (__pazcal_format<TX> const& a,
+  friend inline void __pzhelp_write_fmt (__pzhelp_format<TX> const& a,
                                          int w, int p);
 };
 
 template<typename T>
-inline __pazcal_format<T> FORM (T const& a, int w) {
-  return __pazcal_format<T>(a, w, 0);
+inline __pzhelp_format<T> FORM (T const& a, int w) {
+  return __pzhelp_format<T>(a, w, 0);
 }
 
 template<typename T>
-inline __pazcal_format<T> FORM (T const& a, int w, int p) {
-  return __pazcal_format<T>(a, w, p);
+inline __pzhelp_format<T> FORM (T const& a, int w, int p) {
+  return __pzhelp_format<T>(a, w, p);
 }
 
 template<typename T>
-inline void __pazcal_write_fmt (__pazcal_format<T> const& a, int, int) {
-  __pazcal_write_fmt(a.value, a.width, a.precision);
+inline void __pzhelp_write_fmt (__pzhelp_format<T> const& a, int, int) {
+  __pzhelp_write_fmt(a.value, a.width, a.precision);
 }
 
 
@@ -229,25 +229,25 @@ inline void SKIP_LINE () {
 
 // FOR loops
 
-#define __pazcal_FOR_4(var, start, sign, stop)  \
-  __pazcal_FOR_5(var, start, sign, stop, 1)
-#define __pazcal_FOR_5(var, start, sign, stop, step)                    \
+#define __pzhelp_FOR_4(var, start, sign, stop)  \
+  __pzhelp_FOR_5(var, start, sign, stop, 1)
+#define __pzhelp_FOR_5(var, start, sign, stop, step)                    \
   for (__typeof__(((stop) - (start)) / (step))                          \
          __the_var  = (start),                                          \
          __the_stop = (stop),                                           \
          __the_step = (sign) * ((step) ? :                              \
-           (__pazcal_FATAL("zero step in FOR loop"), 1));               \
+           (__pzhelp_FATAL("zero step in FOR loop"), 1));               \
        ((var) = __the_var,                                              \
         (__the_step >= 0 ? __the_var <= __the_stop                      \
          : __the_var >= __the_stop));                                   \
        ((var) != __the_var ?                                            \
-          __pazcal_FATAL("control variable changed in FOR loop") :      \
+          __pzhelp_FATAL("control variable changed in FOR loop") :      \
         (stop) != __the_stop ?                                          \
-          __pazcal_FATAL("loop limit changed in FOR loop") :            \
+          __pzhelp_FATAL("loop limit changed in FOR loop") :            \
         (__the_var += __the_step, (void) 0)))
 
 #define FOR(...) \
-  __pazcal_CAT(__pazcal_FOR_, __pazcal_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
+  __pzhelp_CAT(__pzhelp_FOR_, __pzhelp_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
 
 #define TO     , +1 ,
 #define DOWNTO , -1 ,
@@ -279,24 +279,24 @@ const T& max (const T& a, const T& b) {
 
 inline void INPUT (const char *filename) {
   if (freopen(filename, "rt", stdin) == NULL) {
-    __pazcal_SYSTEM("Cannot redirect stdin to %s", filename);
+    __pzhelp_SYSTEM("Cannot redirect stdin to %s", filename);
     perror(NULL);
   }
 }
 
 inline void OUTPUT (const char *filename) {
   if (freopen(filename, "wt", stdout) == NULL)
-    __pazcal_SYSTEM("Cannot redirect stdout to %s", filename);
+    __pzhelp_SYSTEM("Cannot redirect stdout to %s", filename);
 }
 
 
 // Dynamic memory management
 
-#define __pazcal_NEW_1(type)    __pazcal_NEW_2(type, 1)
-#define __pazcal_NEW_2(type, n) (new type [n])
+#define __pzhelp_NEW_1(type)    __pzhelp_NEW_2(type, 1)
+#define __pzhelp_NEW_2(type, n) (new type [n])
 
 #define NEW(...) \
-  __pazcal_CAT(__pazcal_NEW_, __pazcal_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
+  __pzhelp_CAT(__pzhelp_NEW_, __pzhelp_COUNT_ARG(__VA_ARGS__))(__VA_ARGS__)
 
 #define DELETE(p) do { delete [] (p); } while(0)
 
