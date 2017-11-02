@@ -32,6 +32,8 @@ PROGRAM {
 }
 ```
 
+You can find the full documentation of the macros defined in PZhelp written in [English](Macros.md) and [Greek](Macros.el.md).
+
 
 Installation
 ------------
