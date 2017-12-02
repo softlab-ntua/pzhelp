@@ -192,19 +192,21 @@ inline void __pzhelp_write_fmt (__pzhelp_format<T> const& a, int, int) {
 
 inline int READ_INT () {
   int result;
-  scanf("%d", &result);
+  if (scanf("%d", &result) != 1)
+    __pzhelp_FATAL("cannot read an integer number");
   return result;
 }
 
 inline REAL READ_REAL () {
   REAL result;
-  scanf("%lf", &result);
+  if (scanf("%lf", &result) != 1)
+    __pzhelp_FATAL("cannot read a real number");
   return result;
 }
 
 inline char* READ_STRING (size_t n, char *s) {
-  char * result = s;
-  for (size_t i=0; i<n; i++) {
+  char *result = s;
+  for (size_t i = 0; i < n; i++) {
     int c = (i+1 < n) ? getchar() : '\0';
     if (c == '\n' || c == EOF) { *s++ = '\0'; break; }
     *s++ = c;
