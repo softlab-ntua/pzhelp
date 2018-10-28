@@ -48,7 +48,7 @@ PROGRAM {
 
 ## PROC
 
-Declares a procedure, ie. a function that returns no value.
+Declares a procedure, i.e.\ a function that returns no value.
 
 ```c
 PROC hello_world() {
@@ -92,7 +92,7 @@ REAL height = READ_REAL();
 
 ## READ_STRING
 
-Reads a string, ie. a sequence of characters, from the user input and returns its value. Requires two arguments, the first being the size of the string that will be read and the second being the string variable where the input will be stored. The function also returns a reference to that variable.
+Reads a string, i.e.\ a sequence of characters, from the user input and returns its value. Requires two arguments, the first being the size of the string that will be read and the second being the string variable where the input will be stored. The function also returns a reference to that variable.
 
 ```c
 char * name;

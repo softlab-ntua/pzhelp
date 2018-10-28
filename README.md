@@ -42,9 +42,10 @@ To install PZhelp to your computer, assuming you are running
 Linux or Mac OS, or that you know what to do with your Windows:
 
 0. Make sure you have `g++` or `clang++` installed and working.
-   Any other C++ compiler will do fine.
+   Other C++ compilers may work; however some GNU extensions are required
+   --- you have been warned!
 
-1. Copy the file `pzhelp` to either to a directory that is in
+1. Copy the file `pzhelp` either to a directory that is in
    your C++ compiler's include path, or to the same directory
    where you have your C++ source files.
 
@@ -54,7 +55,7 @@ This should be enough...
 Maintainer
 ----------
 
-The implementation of Pazcal is maintained by
+The implementation of PZhelp is maintained by
 
 * [Nikos Papaspyrou](https://www.softlab.ntua.gr/~nickie/)
    \<<nickie@softlab.ntua.gr>\>

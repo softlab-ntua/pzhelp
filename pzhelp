@@ -234,7 +234,7 @@ inline void SKIP_LINE () {
 #define __pzhelp_FOR_4(var, start, sign, stop)  \
   __pzhelp_FOR_5(var, start, sign, stop, 1)
 #define __pzhelp_FOR_5(var, start, sign, stop, step)                    \
-  for (__typeof__(((stop) - (start)) / (step))                          \
+  for (decltype(((stop) - (start)) / (step))                            \
          __the_var  = (start),                                          \
          __the_stop = (stop),                                           \
          __the_step = (sign) * ((step) ? :                              \
